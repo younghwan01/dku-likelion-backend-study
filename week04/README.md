@@ -1,4 +1,4 @@
-# 🦁 Week04 Java Study
+# 🦁 Week05 Java Study
 
 이번 주차에는 Java의 **객체지향 프로그래밍**과 **예외 처리**를 학습했습니다.
 
