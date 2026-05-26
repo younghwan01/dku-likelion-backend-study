@@ -263,6 +263,45 @@ Product CRUD API가 정상적으로 동작하는지 확인했습니다.
 
 ---
 
+## 📁 실습 프로젝트 파일
+
+이번 주차 실습 코드는 `SpringBootApi` 폴더에 정리했습니다.
+
+```text
+week05/
+├── README.md
+├── spring-initializr.png
+└── SpringBootApi/
+    ├── build.gradle
+    ├── settings.gradle
+    ├── gradlew
+    ├── gradlew.bat
+    ├── gradle/wrapper/
+    └── src/
+        ├── main/java/com/test/SpringBootApi/
+        │   ├── SpringBootApiApplication.java
+        │   ├── controller/ProductController.java
+        │   ├── domain/Product.java
+        │   ├── respository/ProductRepository.java
+        │   └── service/
+        │       ├── ProductService.java
+        │       └── ProductServiceImpl.java
+        └── main/resources/application.properties
+```
+
+| 파일 | 역할 |
+|---|---|
+| `Product.java` | Product 모델 객체 |
+| `ProductRepository.java` | JPA를 이용한 데이터베이스 연결 |
+| `ProductService.java` | CRUD 기능 인터페이스 |
+| `ProductServiceImpl.java` | CRUD 로직 구현 |
+| `ProductController.java` | HTTP 요청을 받아 서비스 호출 |
+| `application.properties` | H2 Database 및 JPA 설정 |
+
+자동 생성 파일과 개인 환경 파일인 `.idea`, `.gradle`, `build`, `.DS_Store`, `*.iml`은 제외했습니다.
+
+---
+
 ## ✅ 이번 주차 정리
 
 이번 주차에는 웹 서비스가 동작하는 전체 흐름을 학습했습니다.
