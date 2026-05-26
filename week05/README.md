@@ -1,4 +1,4 @@
-# Week 05 - 웹의 동작 원리와 Spring Boot CRUD API
+# Week 05
 
 이번 주차에는 웹이 어떻게 동작하는지 배우고, Spring Boot로 상품 정보를 다루는 API를 실습했습니다.
 
