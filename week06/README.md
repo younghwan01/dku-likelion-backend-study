@@ -125,30 +125,8 @@ H2 Console에서 다시 조회했을 때 데이터가 삭제되어 `(no rows)`�
 
 ![H2 Console 책 삭제 후 조회](./images/화면%20캡처%202026-06-24%20143821.png)
 
-## H2 Console 확인
-
-H2 Console에 접속해서 API 결과가 실제 DB에 반영되는지 확인했다.
-
-H2 Console 접속 주소:
-
-```text
-http://localhost:8080/h2-console
-```
-
-JDBC URL:
-
-```text
-jdbc:h2:~/test;AUTO_SERVER=true
-```
-
-데이터 확인 쿼리:
-
-```sql
-SELECT * FROM BOOKS;
-```
-
 ## 배운 점
 
-Spring Boot 구조가 아직 익숙하지 않아 처음엔 조금 어려웠지만, Controller, Service, Repository, Entity가 각각 어떤 역할을 하는지 이해할 수 있었다.
+Spring Boot 구조가 아직 익숙하지 않아 처음에는 다소 어려웠지만, GPT의 도움을 받으며 과제를 진행하는 과정에서 개념을 조금씩 이해할 수 있었습니다. 
 
-Postman으로 요청을 보내고 H2 Console에서 데이터가 실제로 저장, 수정, 삭제되는 것을 보면서 CRUD API 흐름을 익힐 수 있었다.
+특히 Postman을 활용해 직접 요청을 보내고, 데이터가 실제로 저장, 수정, 삭제되는 과정을 확인하면서 CRUD API의 전체 흐름을 익힐 수 있었습니다.
