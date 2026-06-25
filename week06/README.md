@@ -1,4 +1,4 @@
-# TECHIT 온보딩 트랙 Week06 Final Project
+# 6주차 학습내용
 
 ## 프로젝트 소개
 
