@@ -6,16 +6,6 @@
 
 기존 Product 예제를 참고해서 `Book` 모델로 바꾸고, 과제 요구사항에 맞게 등록, 조회, 수정, 삭제 기능을 구현했다. API 기본 경로는 `/api/books`이고, H2 Database와 Postman을 사용해 동작을 확인했다.
 
-코드 캡처는 따로 없어서 실행 결과와 H2 Console 확인 화면 중심으로 정리했다.
-
-## 사용 기술
-
-- Java
-- Spring Boot
-- Spring Data JPA
-- H2 Database
-- Postman
-
 ## 수정한 내용
 
 - `Product` 관련 모델을 `Book` 기준으로 변경
