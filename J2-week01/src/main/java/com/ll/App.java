@@ -11,6 +11,7 @@ public class App {
         scanner = new Scanner(System.in);
         systemController = new SystemController();
         todoController = new TodoController();
+
     }
 
     public void run() {
