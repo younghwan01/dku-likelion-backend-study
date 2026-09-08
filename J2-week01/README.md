@@ -436,28 +436,6 @@ J2-week01
 
 ---
 
-# 사용한 Java 문법
-
-- `Scanner`
-- `while`
-- `if / else if`
-- `break`
-- `return`
-- 클래스 / 객체
-- 생성자
-- Getter / Setter
-- `ArrayList`
-- `forEach()`
-- Lambda
-- `removeIf()`
-- Stream
-- `filter()`
-- `findFirst()`
-- `orElse()`
-- `Long.parseLong()`
-
----
-
 # 배운 점
 
 이번 실습에서는 CRUD 기능을 구현하는 것뿐만 아니라, 기능이 많아졌을 때 코드를 어떻게 정리하고 분리해야 하는지도 학습했다.
