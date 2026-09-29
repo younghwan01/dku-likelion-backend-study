@@ -1,149 +1,135 @@
-# 전체 데이터베이스 리스팅
+-- J2-week04 / article CRUD
+-- 제목/내용만 있는 article 테이블에서 시작해 id와 작성일을 추가한다.
+
+-- 전체 데이터베이스 확인
 SHOW DATABASES;
 
-# `mysql` 데이터 베이스 선택
+-- mysql 데이터베이스 선택
 USE mysql;
 
-# 테이블 리스팅
+-- 테이블 목록 확인
 SHOW TABLES;
 
-# 특정 테이블의 구조
+-- 특정 테이블 구조 확인
+-- 계정 권한에 따라 mysql.user 조회가 제한될 수 있다.
 DESC `user`;
 
-# `test` 데이터 베이스 선택(없으면 먼저 만들어주세요.)
+-- test 데이터베이스 생성/선택
 CREATE DATABASE IF NOT EXISTS test;
 USE test;
-
-# 테이블 리스팅
 SHOW TABLES;
 
-# 기존에 a1 데이터베이스가 존재 한다면 삭제
+-- a1 데이터베이스 초기화
 DROP DATABASE IF EXISTS `a1`;
-
-# 새 데이터베이스(`a1`) 생성
 CREATE DATABASE `a1`;
-
-# 데이터베이스(`a1`) 선택
 USE `a1`;
 
-# 데이터베이스 추가 되었는지 확인
 SHOW DATABASES;
-
-# 테이블 확인
 SHOW TABLES;
 
-# 게시물 테이블 article(title, body)을 만듭니다.
-# VARCHAR(100) => 문자 100개 저장가능
-# text => 문자 많이 저장가능
+-- 게시물 테이블 생성
+-- VARCHAR(100): 최대 100자의 문자열
+-- TEXT: 긴 문자열 저장
 CREATE TABLE article (
     title VARCHAR(100),
     `body` TEXT
 );
 
-# 잘 추가되었는지 확인, 리스팅과 구조까지 확인
 SHOW TABLES;
 DESC article;
 
-# 데이터 하나 추가(title = 제목, body = 내용)
+-- Create: 데이터 추가
 INSERT INTO article
 SET title = '제목',
-`body` = '내용';
+    `body` = '내용';
 
-# 데이터 조회(title 만)
+-- Read: 원하는 컬럼 조회
 SELECT title
 FROM article;
 
-# 데이터 조회(title, body)
 SELECT title, `body`
 FROM article;
 
-# 데이터 조회(body, title)
 SELECT `body`, title
 FROM article;
 
-# 데이터 조회(*)
+-- 모든 컬럼 조회
 SELECT *
 FROM article;
 
-# 데이터 또 하나 추가(title = 제목, body = 내용)
+-- 같은 내용의 데이터 한 번 더 추가
 INSERT INTO article
 SET title = '제목',
-`body` = '내용';
+    `body` = '내용';
 
-# 데이터 조회(*, 어떤게 2번 게시물인지 알 수 없음)
+-- 두 행을 구분할 id가 아직 없다.
 SELECT *
 FROM article;
 
-# 테이블 구조 수정(id 칼럼 추가, first)
+-- id 컬럼을 맨 앞에 추가
 ALTER TABLE article ADD COLUMN id INT FIRST;
 
-# 데이터 조회(*, id 칼럼의 값은 NULL)
+-- 기존 데이터의 id는 NULL
 SELECT *
 FROM article;
 
-# 기존 데이터에 id값 추가(id = 1, id IS NULL)
+-- NULL인 모든 id를 1로 변경
 UPDATE article
 SET id = 1
 WHERE id IS NULL;
 
-# 데이터 조회(*, 둘다 수정되어 버림..)
 SELECT *
 FROM article;
 
-# 기존 데이터 중 1개만 id를 2로 변경(LIMIT 1)
+-- id가 1인 행 중 1개만 id=2로 변경
+-- LIMIT 1은 변경할 행 수만 제한한다.
 UPDATE article
 SET id = 2
+WHERE id = 1
 LIMIT 1;
 
-# 데이터 조회(*)
 SELECT *
 FROM article;
 
-# 데이터 1개 추가(id = 3, title = 제목3, body = 내용3)
+-- id=3 데이터 추가
 INSERT INTO article
 SET id = 3,
-title = '제목3',
-body = '내용3';
+    title = '제목3',
+    `body` = '내용3';
 
-# 데이터 조회(*)
 SELECT *
 FROM article;
 
-# 2번 게시물, 데이터 삭제 => DELETE
+-- Delete: id=2 게시물 삭제
 DELETE FROM article
 WHERE id = 2;
 
-# 데이터 조회(*)
 SELECT *
 FROM article;
 
-# 날짜 칼럼 추가(id 칼럼 뒤에) => regDate DATETIME
-ALTER TABLE article ADD COLUMN regDate DATETIME AFTER id;
+-- 작성일 컬럼 추가
+ALTER TABLE article
+ADD COLUMN regDate DATETIME AFTER id;
 
-# 테이블 구조 확인
 DESC article;
-
-# 데이터 조회(*, 날짜 정보가 비어있음)
 SELECT *
 FROM article;
 
-# 1번 게시물의 비어있는 날짜정보 채움(regDate = 2018-08-10 15:00:00)
+-- id=1 게시물의 작성일 직접 입력
 UPDATE article
 SET regDate = '2018-08-10 15:00:00'
 WHERE id = 1;
 
-# 데이터 조회(*, 이제 2번 게시물의 날짜 정보만 넣으면 됩니다.)
 SELECT *
 FROM article;
 
-# NOW() 함수 실행해보기
+-- NOW(): 현재 날짜/시간 반환
 SELECT NOW();
 
-# 3번 게시물의 비어있는 날짜정보 채움(NOW())
+-- id=3 게시물의 작성일을 현재 시간으로 입력
 UPDATE article
 SET regDate = NOW()
 WHERE id = 3;
 
-# 데이터 조회(*)
 SELECT *
 FROM article;
