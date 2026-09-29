@@ -1,9 +1,11 @@
-# a5 데이터베이스 삭제/생성/선택
+-- J2-week04 / INNER JOIN
+-- 부서명을 사원 테이블에 직접 저장하던 구조를 deptId 방식으로 바꾸고 JOIN을 실습한다.
+
 DROP DATABASE IF EXISTS a5;
 CREATE DATABASE a5;
 USE a5;
 
-# 부서(dept) 테이블 생성 및 홍보부서 기획부서 추가
+-- 1. 부서(dept) 테이블 생성
 CREATE TABLE dept (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     PRIMARY KEY(id),
@@ -13,16 +15,17 @@ CREATE TABLE dept (
 
 INSERT INTO dept
 SET regDate = NOW(),
-`name` = '홍보';
+    `name` = '홍보';
 
 INSERT INTO dept
 SET regDate = NOW(),
-`name` = '기획';
+    `name` = '기획';
 
 SELECT *
 FROM dept;
 
-# 사원(emp) 테이블 생성 및 홍길동사원(홍보부서), 홍길순사원(홍보부서), 임꺽정사원(기획부서) 추가
+-- 2. 사원(emp) 테이블 생성
+-- 처음에는 부서명을 deptName에 직접 저장한다.
 CREATE TABLE emp (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     PRIMARY KEY(id),
@@ -33,27 +36,24 @@ CREATE TABLE emp (
 
 INSERT INTO emp
 SET regDate = NOW(),
-`name` = '홍길동',
-deptName = '홍보';
+    `name` = '홍길동',
+    deptName = '홍보';
 
 INSERT INTO emp
 SET regDate = NOW(),
-`name` = '홍길순',
-deptName = '홍보';
+    `name` = '홍길순',
+    deptName = '홍보';
 
 INSERT INTO emp
 SET regDate = NOW(),
-`name` = '임꺽정',
-deptName = '기획';
+    `name` = '임꺽정',
+    deptName = '기획';
 
 SELECT *
 FROM emp;
 
-# 홍보를 마케팅으로 변경
-## 부서명 변경(홍보 => 마케팅)
-SELECT *
-FROM dept;
-
+-- 3. 부서명을 직접 저장했을 때의 문제 확인
+-- dept의 '홍보'를 '마케팅'으로 변경
 UPDATE dept
 SET `name` = '마케팅'
 WHERE `name` = '홍보';
@@ -61,7 +61,7 @@ WHERE `name` = '홍보';
 SELECT *
 FROM dept;
 
-## 사원테이블에서 부서명 변경(홍보 => 마케팅)
+-- emp에는 아직 '홍보'가 남아 있으므로 별도로 수정해야 한다.
 SELECT *
 FROM emp;
 
@@ -72,36 +72,18 @@ WHERE deptName = '홍보';
 SELECT *
 FROM emp;
 
-# 마케팅을 홍보로 변경
-## 부서명 변경(마케팅 => 홍보)
-
-SELECT *
-FROM dept;
-
+-- 다시 원래 상태로 복구
 UPDATE dept
 SET `name` = '홍보'
 WHERE `name` = '마케팅';
-
-SELECT *
-FROM dept;
-
-## 사원테이블에서 부서명 변경(마케팅 => 홍보)
-SELECT *
-FROM emp;
 
 UPDATE emp
 SET deptName = '홍보'
 WHERE deptName = '마케팅';
 
-SELECT *
-FROM emp;
-
-# 홍보를 마케팅으로 변경
-## 구조를 변경하기로 결정(사원 테이블에서, 이제는 부서를 이름이 아닌 번호로 기억)
-ALTER TABLE emp ADD COLUMN deptId INT UNSIGNED NOT NULL;
-
-SELECT *
-FROM emp;
+-- 4. 사원 테이블이 부서 이름 대신 부서 번호를 기억하도록 변경
+ALTER TABLE emp
+ADD COLUMN deptId INT UNSIGNED NOT NULL;
 
 UPDATE emp
 SET deptId = 1
@@ -114,16 +96,14 @@ WHERE deptName = '기획';
 SELECT *
 FROM emp;
 
-ALTER TABLE emp DROP COLUMN deptName;
+-- 기존 deptName 제거
+ALTER TABLE emp
+DROP COLUMN deptName;
 
-## 이제 더 이상 emp 테이블에 부서명이 없다.
 SELECT *
 FROM emp;
 
-## 부서명 변경(홍보 => 마케팅)
-SELECT *
-FROM dept;
-
+-- 이제 부서 이름은 dept에서만 바꾸면 된다.
 UPDATE dept
 SET `name` = '마케팅'
 WHERE `name` = '홍보';
@@ -131,77 +111,79 @@ WHERE `name` = '홍보';
 SELECT *
 FROM dept;
 
-# 사장님께 드릴 인명록을 생성
 SELECT *
 FROM emp;
 
-# 사장님께서 부서번호가 아니라 부서명을 알고 싶어하신다.
-## 그래서 dept 테이블 조회법을 알려드리고 혼이 났다.
-## 출력 : id, regDate, name, deptId
+-- 5. 사장님께 드릴 인명록
+-- emp만 조회하면 deptId만 보여 부서 이름을 바로 알기 어렵다.
 SELECT *
-FROM dept
-WHERE id = 1;
+FROM emp;
 
-# 사장님께 드릴 인명록을 생성(v2, 부서명 포함, ON 없이)
-## 이상한 데이터가 생성되어서 혼남
-## 출력 : id, regDate, name, deptId, 부서명
+-- dept를 따로 조회하면 부서명을 볼 수 있지만 한 화면에 사원 정보와 같이 나오지 않는다.
+SELECT *
+FROM dept;
+
+-- 6. ON 없이 JOIN
+-- MySQL에서는 두 테이블의 가능한 조합이 만들어져 잘못된 소속까지 함께 보일 수 있다.
 SELECT emp.*, dept.name AS `부서명`
 FROM emp
-INNER JOIN dept; /* 2개 테이블의 모든 데이터들의 조합으로 구성된 무지성병합테이블이 생성되고 거기서 내용을 가져온다. */
+INNER JOIN dept;
 
-# 사장님께 드릴 인명록을 생성(v3, 부서명 포함, 올바른 조인 룰(ON) 적용)
-## 보고용으로 좀 더 편하게 보여지도록 고쳐야 한다고 지적받음
-## 출력 : id, regDate, name, deptId, 부서명
-SELECT emp.*, dept.id, dept.name AS `부서명`
+-- 7. ON 조건을 적용한 올바른 INNER JOIN
+-- emp.deptId와 dept.id가 같은 행끼리 연결한다.
+SELECT emp.*, dept.name AS `부서명`
 FROM emp
 INNER JOIN dept
-ON emp.deptId = dept.id; /* 무지성병합테이블에서 이상한 데이터를 없앤다, 즉 이 조건을 만족하지 못하는 녀석은 필터링 한다. INNER JOIN 사용할 때 ON 은 필수 */
+ON emp.deptId = dept.id;
 
-# 사장님께 드릴 인명록을 생성(v4, 사장님께서 보시기에 편한 칼럼명(AS))
-## 출력 : 사원번호, 사원명, 입사일, 부서명
+-- 8. 출력 컬럼명을 보기 좋게 변경
 SELECT emp.id AS `사원번호`,
-emp.name AS `사원명`,
-DATE(emp.regDate) AS `입사일`,
-dept.name AS `부서명`
+       emp.name AS `사원명`,
+       DATE(emp.regDate) AS `입사일`,
+       dept.name AS `부서명`
 FROM emp
 INNER JOIN dept
 ON emp.deptId = dept.id
 ORDER BY `부서명`, `사원명`;
 
-# 사장님께 드릴 인명록을 생성(v5, 테이블 AS 적용)
-## 출력 : 사원번호, 사원명, 입사일, 부서명
+-- 9. 테이블에도 별칭(AS) 적용
 SELECT E.id AS `사원번호`,
-E.name AS `사원명`,
-DATE(E.regDate) AS `입사일`,
-D.name AS `부서명`
+       E.name AS `사원명`,
+       DATE(E.regDate) AS `입사일`,
+       D.name AS `부서명`
 FROM emp AS E
 INNER JOIN dept AS D
 ON E.deptId = D.id
 ORDER BY `부서명`, `사원명`;
 
-# 추가내용
-# 기획부서에 김영희가 배속되었다.
-## 먼저 기획부서의 번호가 몇번인지 확인
-SELECT *
+-- 10. 기획부서에 김영희 추가
+SELECT id, `name`
 FROM dept;
 
-## 김영희 사원 추가
 INSERT INTO emp
 SET regDate = NOW(),
-`name` = '김영희',
-deptId = 2
+    `name` = '김영희',
+    deptId = 2;
 
-# 신설 IT부서에 김철수가 배속되었다.
+-- 11. IT 부서 생성 후 김철수 배속
 INSERT INTO dept
 SET regDate = NOW(),
-`name` = 'IT';
+    `name` = 'IT';
 
-## IT 부서의 번호가 3번임을 확인
-SELECT *
+SELECT id, `name`
 FROM dept;
 
-## 김철수 사원 추가
 INSERT INTO emp
 SET regDate = NOW(),
-`name` = '김철수',
-deptId = 3;
+    `name` = '김철수',
+    deptId = 3;
+
+-- 최종 인명록
+SELECT E.id AS `사원번호`,
+       E.name AS `사원명`,
+       DATE(E.regDate) AS `입사일`,
+       D.name AS `부서명`
+FROM emp AS E
+INNER JOIN dept AS D
+ON E.deptId = D.id
+ORDER BY `부서명`, `사원명`;
