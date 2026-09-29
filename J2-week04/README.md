@@ -1,109 +1,80 @@
-# J2-week04 - MySQL 기초 / CRUD / 제약조건 / INNER JOIN
+# J2-week04 - MySQL / Database 기초
 
-이번 주차에서는 **MySQL + DBeaver**를 사용해 데이터베이스의 기본 구조를 익히고,
-게시물 데이터를 직접 생성·조회·수정·삭제한 뒤 제약조건과 JOIN까지 실습했다.
+이번 주차에서는 **데이터베이스를 처음 접하면서 MySQL과 DBeaver를 이용해 기본적인 SQL 사용법을 학습**했다.  
+단순히 데이터를 저장하는 것뿐 아니라, 테이블 구조를 어떻게 설계하고 여러 테이블의 데이터를 어떻게 연결하는지도 함께 실습했다.
 
-## 학습 내용
+## 학습 환경
 
-- Database / Table 생성 및 조회
-- CRUD: `INSERT`, `SELECT`, `UPDATE`, `DELETE`
-- 테이블 구조 확인: `DESC`
-- 컬럼 추가·수정·삭제: `ALTER TABLE`
-- 제약조건: `NOT NULL`, `PRIMARY KEY`, `AUTO_INCREMENT`, `UNSIGNED`
-- 조건 조회: `WHERE`, `LIKE`, `AND`, `OR`
-- 정렬 및 개수 제한: `ORDER BY`, `LIMIT`
-- 여러 테이블 연결: `INNER JOIN ... ON`
-- 별칭: `AS`
+- MySQL
+- DBeaver
+- Docker
 
-## 실습 파일
+## 핵심 학습 내용
 
-| 파일 | 내용 |
-| --- | --- |
-| [article-crud.sql](./article-crud.sql) | 게시글 테이블 생성, CRUD, id / 작성일 컬럼 추가 |
-| [constraints.sql](./constraints.sql) | NOT NULL, PRIMARY KEY, AUTO_INCREMENT, 컬럼 변경, 조건 조회 |
-| [inner-join.sql](./inner-join.sql) | 부서/사원 테이블 구조 개선, deptId 도입, INNER JOIN |
+### 1. Database / DBMS / Table 구조
 
----
+데이터베이스는 데이터를 저장하는 공간이고, MySQL은 여러 데이터베이스를 관리하는 **DBMS(Database Management System)** 이다.
 
-## 1. article CRUD
+테이블은 다음과 같이 구성된다.
 
-처음에는 게시글에 `title`, `body`만 저장했다.
+- **Column**: 데이터의 속성
+- **Row**: 실제 데이터 한 건
 
-```sql
-CREATE TABLE article (
-    title VARCHAR(100),
-    `body` TEXT
-);
-```
+예를 들어 사원 테이블이라면 이름, 부서, 입사일 등이 컬럼이고 사원 한 명의 정보가 하나의 로우가 된다.
 
-하지만 같은 제목과 내용을 가진 데이터가 여러 개 생기면 각각을 구분하기 어렵다.
-그래서 `id` 컬럼을 추가하고, 이후 작성 시간을 저장하기 위해 `regDate`도 추가했다.
+### 2. DDL과 DML
 
-### CRUD
+SQL은 크게 구조를 다루는 명령과 데이터를 다루는 명령으로 나눌 수 있다.
 
-| 구분 | SQL | 의미 |
-| --- | --- | --- |
-| Create | `INSERT` | 데이터 추가 |
-| Read | `SELECT` | 데이터 조회 |
-| Update | `UPDATE` | 데이터 수정 |
-| Delete | `DELETE` | 데이터 삭제 |
+**DDL**
 
-`SELECT * FROM article;`은 article 테이블의 **모든 컬럼과 실제 데이터**를 조회한다.
+- `CREATE`: 데이터베이스 / 테이블 생성
+- `ALTER`: 테이블 구조 변경
+- `DROP`: 데이터베이스 / 테이블 / 컬럼 삭제
 
-반면,
+**DML**
 
-```sql
-DESC article;
-```
+- `INSERT`: 데이터 추가
+- `SELECT`: 데이터 조회
+- `UPDATE`: 데이터 수정
+- `DELETE`: 데이터 삭제
 
-은 실제 데이터가 아니라 컬럼명, 자료형, NULL 허용 여부, Key 등 **테이블 구조**를 확인한다.
+이번 실습에서는 게시글 테이블을 직접 만들고 CRUD를 반복하면서 SQL의 기본 흐름을 익혔다.
 
----
+### 3. 테이블 구조 변경
 
-## 2. 제약조건
+처음에는 게시글을 `title`, `body`만 저장했지만 같은 내용의 게시글을 구분하기 어려웠다.
 
-처음 만든 `article` 테이블에서는 id를 입력하지 않아도 데이터가 저장되어 id가 `NULL`이 될 수 있었다.
+그래서 `ALTER TABLE`을 이용해 다음 컬럼을 추가했다.
 
-### NOT NULL
+- `id`: 각 게시글을 구분하기 위한 번호
+- `regDate`: 작성 시간
 
-```sql
-ALTER TABLE article MODIFY id INT NOT NULL;
-```
+`DESC article;`을 통해 컬럼명, 자료형, NULL 허용 여부, Key 등 **테이블 구조**를 확인할 수 있다는 것도 배웠다.
 
-기존 데이터에 이미 NULL이 존재하면 바로 적용할 수 없다.
-따라서 기존 값을 먼저 정리한 뒤 제약조건을 적용해야 한다.
+### 4. 제약조건
 
-### PRIMARY KEY
+잘못된 데이터가 들어가는 것을 막기 위해 여러 제약조건을 적용했다.
 
-PRIMARY KEY는 각 행을 구분하는 대표 값이다.
+- `NOT NULL`: NULL 값 금지
+- `PRIMARY KEY`: 각 행을 고유하게 식별
+- `AUTO_INCREMENT`: id 자동 증가
+- `UNSIGNED`: 음수 값 사용하지 않음
+- `UNIQUE`: 중복 값 방지
 
-- NULL 불가
-- 중복 불가
+특히 기존 데이터에 NULL이나 중복 값이 있으면 제약조건을 바로 적용할 수 없어서, **기존 데이터를 먼저 정리한 뒤 제약조건을 적용해야 한다는 점**을 확인했다.
 
-기존 id 값이 모두 0처럼 중복되어 있으면 PRIMARY KEY 적용이 실패한다.
-중복을 먼저 제거한 뒤 적용했다.
+### 5. 조건 조회
 
-### AUTO_INCREMENT
+`WHERE`, `LIKE`, `AND`, `OR`, `ORDER BY`, `LIMIT`을 사용해 원하는 데이터만 조회했다.
+
+예시:
 
 ```sql
-ALTER TABLE article
-MODIFY COLUMN id INT UNSIGNED NOT NULL AUTO_INCREMENT;
+SELECT *
+FROM article
+WHERE nickname LIKE '홍길%';
 ```
-
-새 데이터를 추가할 때 id를 직접 입력하지 않아도 자동으로 증가하는 번호가 부여된다.
-
-### 컬럼 변경
-
-이번 실습에서는 `ALTER TABLE`을 이용해 다음 작업도 수행했다.
-
-- `ADD COLUMN`: 컬럼 추가
-- `CHANGE`: 컬럼 이름 변경
-- `MODIFY COLUMN`: 자료형/조건/위치 변경
-- `DROP COLUMN`: 컬럼 삭제
-
----
-
-## 3. 조건 조회
 
 ```sql
 SELECT *
@@ -112,38 +83,21 @@ ORDER BY hit DESC
 LIMIT 3;
 ```
 
-조회수가 높은 순으로 정렬한 뒤 상위 3개만 조회한다.
+이를 통해 단순 전체 조회뿐 아니라 조건에 맞는 데이터만 필터링하고 정렬하는 방법을 익혔다.
 
-```sql
-SELECT *
-FROM article
-WHERE nickname LIKE '홍길%';
-```
-
-`%`는 뒤에 어떤 문자열이 와도 된다는 의미이므로 작성자명이 **홍길로 시작하는 데이터**를 찾는다.
-
-또한,
-
-- `AND`: 두 조건을 모두 만족
-- `OR`: 둘 중 하나 이상 만족
-- `!=`: 같지 않음
-
-을 사용해 원하는 데이터만 필터링했다.
-
----
-
-## 4. dept / emp와 INNER JOIN
+### 6. 테이블 설계와 관계
 
 처음에는 사원 테이블에 부서명을 직접 저장했다.
 
-예를 들어 홍보 부서의 이름을 마케팅으로 변경하면,
+```text
+홍길동 | 홍보
+홍길순 | 홍보
+임꺽정 | 기획
+```
 
-- `dept.name`
-- `emp.deptName`
+하지만 부서명 `홍보`를 `마케팅`으로 바꾸려면 부서 테이블과 사원 테이블을 모두 수정해야 했다.
 
-두 곳을 모두 수정해야 한다.
-
-이 중복을 줄이기 위해 사원 테이블에는 부서 이름 대신 **부서 번호(deptId)** 를 저장하도록 구조를 변경했다.
+그래서 사원 테이블에는 부서 이름 대신 **부서 번호(deptId)** 를 저장하도록 구조를 변경했다.
 
 ```text
 dept
@@ -158,10 +112,11 @@ id | name   | deptId
 3  | 임꺽정 | 2
 ```
 
-이제 부서 이름은 `dept`에서 한 번만 관리하고,
-사원은 `deptId`를 통해 자신의 부서를 기억한다.
+이렇게 하면 부서 이름이 변경되어도 사원 테이블의 `deptId`는 그대로 유지할 수 있다.
 
-### INNER JOIN
+### 7. INNER JOIN
+
+사원 정보와 부서명을 한 번에 보기 위해 `INNER JOIN`을 사용했다.
 
 ```sql
 SELECT E.id AS `사원번호`,
@@ -173,7 +128,7 @@ INNER JOIN dept AS D
 ON E.deptId = D.id;
 ```
 
-핵심은
+여기서 핵심은
 
 ```sql
 ON E.deptId = D.id
@@ -181,21 +136,29 @@ ON E.deptId = D.id
 
 이다.
 
-사원의 `deptId`와 부서의 `id`가 같은 행끼리 연결해서
-사원 정보와 부서명을 한 번에 조회한다.
+`ON` 조건을 통해 서로 관계가 있는 행끼리 연결해야 올바른 결과를 얻을 수 있다는 점을 배웠다.
 
-## 이번 주 핵심 정리
+## 실습 파일
 
-1. 테이블의 **데이터 조회**는 `SELECT`, **구조 확인**은 `DESC`
-2. 제약조건을 추가하려면 기존 데이터도 해당 조건을 만족해야 함
-3. `PRIMARY KEY`는 행을 고유하게 구분
-4. `AUTO_INCREMENT`는 id를 자동으로 증가시킴
-5. 같은 정보를 여러 테이블에 반복 저장하면 수정할 곳이 늘어남
-6. 관계가 있는 데이터는 번호(id)로 연결하고 JOIN으로 함께 조회할 수 있음
-7. `INNER JOIN`에서는 어떤 행끼리 연결할지 `ON` 조건이 중요함
+| 파일 | 내용 |
+| --- | --- |
+| [article-crud.sql](./article-crud.sql) | 데이터베이스 / 테이블 생성, 게시글 CRUD, id와 작성일 추가 |
+| [constraints.sql](./constraints.sql) | NOT NULL, PRIMARY KEY, AUTO_INCREMENT, 컬럼 변경, 조건 조회 |
+| [inner-join.sql](./inner-join.sql) | dept / emp 테이블 설계 변경, deptId 적용, INNER JOIN |
 
-## 실행 환경
+## 이번 주 핵심
 
-- MySQL 8.4.1
-- DBeaver
-- Docker
+- SQL의 기본 CRUD를 직접 작성해 봄
+- `SELECT`는 데이터 조회, `DESC`는 테이블 구조 확인
+- 테이블은 처음 설계하는 방식이 중요함
+- 제약조건을 통해 잘못된 데이터를 방지할 수 있음
+- 같은 정보를 여러 곳에 중복 저장하면 수정이 어려워짐
+- 관계가 있는 데이터는 id로 연결하고 JOIN으로 함께 조회할 수 있음
+- JOIN에서는 `ON` 조건이 중요함
+
+## 느낀점
+
+데이터베이스를 처음 배워서 처음에는 테이블, 로우, 컬럼 같은 용어부터 익숙하지 않았다.  
+하지만 직접 게시글 데이터를 추가하고 수정해 보고, 부서와 사원 테이블을 나눠 JOIN까지 해보면서 **백엔드에서 데이터를 어떻게 저장하고 관리하는지 흐름을 조금씩 이해할 수 있었다.**
+
+특히 단순히 SQL 문법만 작성하는 것보다 **처음에 테이블 구조를 어떻게 설계하느냐가 중요하다는 점**이 인상적이었다. 앞으로 Spring에서 데이터베이스를 연결할 때 이번에 배운 내용이 어떻게 사용되는지 더 공부해 보고 싶다.
