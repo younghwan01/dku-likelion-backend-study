@@ -125,14 +125,10 @@ SELECT E.id AS `사원번호`,
        D.name AS `부서명`
 FROM emp AS E
 INNER JOIN dept AS D
-ON E.deptId = D.id;
 ```
 
 여기서 핵심은
 
-```sql
-ON E.deptId = D.id
-```
 
 이다.
 
