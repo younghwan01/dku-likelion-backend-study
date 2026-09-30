@@ -178,7 +178,6 @@ SELECT E.id AS `사원번호`,
        D.name AS `부서명`
 FROM emp AS E
 INNER JOIN dept AS D
-ON E.deptId = D.id;
 ```
 
 또한 `AS`를 사용하여 테이블명과 컬럼명에 별칭을 지정해 조회 결과를 더 보기 쉽게 표현하는 방법도 학습했습니다.
