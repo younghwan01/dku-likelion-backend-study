@@ -12,24 +12,63 @@
 - **Database**: 데이터를 저장하고 관리하는 공간
 - **DBMS(Database Management System)**: 여러 데이터베이스를 관리하는 시스템
 
-### 2. DDL과 DML
+### 2. 기본 SQL 명령어
 
-SQL 명령어를 구조를 정의하는 **DDL**과 데이터를 조작하는 **DML**로 구분하여 학습했습니다.
+데이터베이스와 테이블을 생성하고, 데이터를 추가·조회·수정·삭제하는 기본 SQL 명령어를 학습했습니다.
 
-**DDL**
-
-- `CREATE`: 데이터베이스 / 테이블 생성
-- `ALTER`: 테이블 구조 변경
-- `DROP`: 데이터베이스 / 테이블 / 컬럼 삭제
-
-**DML**
-
+- `CREATE`: 데이터베이스나 테이블 생성
 - `INSERT`: 데이터 추가
 - `SELECT`: 데이터 조회
 - `UPDATE`: 데이터 수정
 - `DELETE`: 데이터 삭제
+- `DROP`: 데이터베이스나 테이블 삭제
 
-게시글 테이블을 직접 생성하고 CRUD를 실습하면서 SQL의 기본적인 데이터 처리 흐름을 배웠습니다.
+데이터베이스 생성:
+
+```sql
+CREATE DATABASE a1;
+```
+
+테이블 생성:
+
+```sql
+CREATE TABLE article (
+    title VARCHAR(100),
+    body TEXT
+);
+```
+
+데이터 추가:
+
+```sql
+INSERT INTO article
+SET title = '제목',
+    body = '내용';
+```
+
+데이터 조회:
+
+```sql
+SELECT *
+FROM article;
+```
+
+데이터 수정:
+
+```sql
+UPDATE article
+SET title = '수정된 제목'
+WHERE id = 1;
+```
+
+데이터 삭제:
+
+```sql
+DELETE FROM article
+WHERE id = 2;
+```
+
+이러한 명령어를 직접 사용하면서 데이터베이스에서 데이터를 생성하고 관리하는 기본적인 흐름을 배웠습니다.
 
 ### 3. 테이블 구조 변경
 
@@ -39,6 +78,18 @@ SQL 명령어를 구조를 정의하는 **DDL**과 데이터를 조작하는 **D
 
 - `id`: 게시글을 구분하기 위한 번호
 - `regDate`: 게시글 작성 시간
+
+예시:
+
+```sql
+ALTER TABLE article
+ADD COLUMN id INT FIRST;
+```
+
+```sql
+ALTER TABLE article
+ADD COLUMN regDate DATETIME AFTER id;
+```
 
 또한 `DESC article;`을 사용하여 컬럼명, 자료형, NULL 허용 여부, Key 등 **테이블의 구조를 확인하는 방법**을 배웠습니다.
 
