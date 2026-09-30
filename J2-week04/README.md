@@ -126,6 +126,12 @@ SELECT E.id AS `사원번호`,
 FROM emp AS E
 INNER JOIN dept AS D
 ```
+
+`INNER JOIN`을 사용하면 서로 다른 두 테이블에서 **관계가 있는 데이터만 연결해서 조회**할 수 있다.
+
+이번 실습에서는 `emp.deptId`와 `dept.id`가 같은 행끼리 연결해서,
+사원 정보와 부서명을 한 번에 조회했다.
+
 ## 실습 파일
 
 | 파일 | 내용 |
