@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:8080
+@articleId = 1
+@surlId = 1
+
+### 회원가입 (다시 실행하면 중복으로 409 응답)
+POST {{baseUrl}}/api/members
+Content-Type: application/json
+
+{"username":"younghwan","password":"password123","nickname":"영환"}
+
+### 로그인 (IntelliJ HTTP Client가 응답 쿠키를 다음 요청에 사용합니다)
+POST {{baseUrl}}/api/members/login
+Content-Type: application/json
+
+{"username":"younghwan","password":"password123"}
+
+### 내 정보
+GET {{baseUrl}}/api/members/me
+
+### 게시글 등록: 응답의 id를 위 articleId에 입력하세요.
+POST {{baseUrl}}/api/articles
+Content-Type: application/json
+
+{"title":"JPA 학습","body":"영속성과 CRUD를 배웠습니다."}
+
+### 제목 검색
+GET {{baseUrl}}/api/articles?keyword=JPA
+
+### 게시물 수
+GET {{baseUrl}}/api/articles/count
+
+### ID 목록 검색
+GET {{baseUrl}}/api/articles/by-ids?ids={{articleId}}
+
+### 게시물 수정
+PUT {{baseUrl}}/api/articles/{{articleId}}
+Content-Type: application/json
+
+{"title":"수정된 제목","body":"더티 체킹을 학습했습니다."}
+
+### URL 등록: 응답의 id를 위 surlId에 입력하세요.
+POST {{baseUrl}}/api/surls
+Content-Type: application/json
+
+{"body":"구글","url":"https://www.google.com"}
+
+### 리다이렉트: 원래 주소로 이동하고 조회수가 증가합니다.
+GET {{baseUrl}}/g/{{surlId}}
+
+### URL 조회: 서버 재시작 후에도 같은 id로 조회하세요.
+GET {{baseUrl}}/api/surls/{{surlId}}
+
+### URL 목록
+GET {{baseUrl}}/api/surls
+
+### 없는 게시물 조회: 404
+GET {{baseUrl}}/api/articles/9223372036854775807
+
+### 게시글 삭제
+DELETE {{baseUrl}}/api/articles/{{articleId}}
+
+### 로그아웃
+POST {{baseUrl}}/api/members/logout

@@ -1,0 +1,2 @@
+pluginManagement { repositories { mavenCentral(); gradlePluginPortal() } }
+rootProject.name = 'j2-week05-jpa'
