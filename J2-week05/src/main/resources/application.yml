@@ -1,23 +1,26 @@
+server:
+  port: 8070
 spring:
+  profiles:
+    active: dev
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/surl_dev?serverTimezone=Asia/Seoul&characterEncoding=UTF-8}
-    username: ${DB_USERNAME:root}
+    url: jdbc:mysql://localhost:3306/surl_dev
+    username: root
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: true
         default_batch_fetch_size: 100
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
 logging:
   level:
-    org.hibernate.SQL: debug
-server:
-  servlet:
-    session:
-      cookie:
-        http-only: true
-        same-site: lax
+    com.ll.demo03: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.transaction.interceptor: TRACE

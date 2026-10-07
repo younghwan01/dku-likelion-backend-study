@@ -1,7 +1,0 @@
-spring:
-  config:
-    activate:
-      on-profile: dev
-logging:
-  level:
-    org.hibernate.orm.jdbc.bind: trace
