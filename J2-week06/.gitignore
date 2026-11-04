@@ -1,0 +1,17 @@
+# local secrets and credentials
+.env
+*.pem
+*.key
+*.tfvars
+*.tfvars.json
+
+# terraform state / cache
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# IDE / build artifacts
+.idea/
+.gradle/
+build/
