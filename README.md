@@ -10,6 +10,7 @@
 - [J2-week05 - Spring Data JPA로 영속성 부여](./J2-week05)
 - [J2-week06 - AWS EC2, Terraform, DB와 CI/CD 학습](./J2-week06)
 - [J2-week07 - Spring Boot 회원가입 API 및 예외 처리](./J2-week07)
+- [J2-week08 - REST API CRUD와 아이디/비밀번호 인증](./J2-week08)
 
 ## 기존 실습
 - [week03](./week03)
